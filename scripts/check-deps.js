@@ -13,13 +13,33 @@ if (!fs.existsSync(rootPackagePath)) {
 }
 
 const rootPkg = JSON.parse(fs.readFileSync(rootPackagePath, 'utf8'));
-const overrides = rootPkg.overrides || {};
 
-const overridePairs = Object.entries(overrides)
-  .filter(([, value]) => typeof value === 'string');
+function collectVersions(section) {
+  return Object.entries(section || {}).reduce((acc, [name, value]) => {
+    if (typeof value === 'string') {
+      acc[name] = value;
+    }
+    return acc;
+  }, {});
+}
 
-if (overridePairs.length === 0) {
-  console.log('No overrides to verify.');
+const policyOverrides = collectVersions(rootPkg.dependencyVersionPolicy);
+
+const rootVersionMap = Object.keys(policyOverrides).length > 0
+  ? policyOverrides
+  : {
+      ...collectVersions(rootPkg.dependencies),
+      ...collectVersions(rootPkg.devDependencies),
+      ...collectVersions(rootPkg.peerDependencies),
+      ...collectVersions(rootPkg.optionalDependencies),
+      ...collectVersions(rootPkg.overrides),
+      ...collectVersions(rootPkg.resolutions),
+    };
+
+const trackedDeps = Object.keys(rootVersionMap);
+
+if (trackedDeps.length === 0) {
+  console.log('No root dependencies to verify.');
   process.exit(0);
 }
 
@@ -49,6 +69,21 @@ function listWorkspacePackages() {
   return Array.from(results);
 }
 
+function rangesMatch(expected, actual) {
+  const options = { includePrerelease: true };
+  const expectedRange = semver.validRange(expected, options);
+  const actualRange = semver.validRange(actual, options);
+
+  if (expectedRange && actualRange) {
+    return (
+      semver.subset(actual, expected, options) &&
+      semver.subset(expected, actual, options)
+    );
+  }
+
+  return expected === actual;
+}
+
 function checkPackage(directory) {
   const pkgPath = path.join(rootDir, directory, 'package.json');
   if (!fs.existsSync(pkgPath)) return [];
@@ -60,16 +95,12 @@ function checkPackage(directory) {
     ...(pkg.peerDependencies || {}),
   };
 
-  return overridePairs.reduce((issues, [name, expected]) => {
+  return trackedDeps.reduce((issues, name) => {
+    const expected = rootVersionMap[name];
     const actual = deps[name];
     if (!actual) return issues;
 
-    const cleanExpected = semver.clean(expected);
-    const matches = cleanExpected
-      ? semver.satisfies(cleanExpected, actual, { includePrerelease: true })
-      : expected === actual;
-
-    if (!matches) {
+    if (!rangesMatch(expected, actual)) {
       issues.push({ name, expected, actual });
     }
 
@@ -97,4 +128,4 @@ if (hasIssue) {
   process.exit(1);
 }
 
-console.log('All workspace dependencies match overrides.');
+console.log('All workspace dependencies match root versions.');

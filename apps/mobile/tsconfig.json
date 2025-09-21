@@ -43,28 +43,28 @@
         "./src/assets/*"
       ],
       "@ybis/core": [
-        "../packages/core/src"
+        "../../packages/core/src"
       ],
       "@ybis/core/*": [
-        "../packages/core/src/*"
+        "../../packages/core/src/*"
       ],
       "@ybis/api-client": [
-        "../packages/api-client/src"
+        "../../packages/api-client/src"
       ],
       "@ybis/api-client/*": [
-        "../packages/api-client/src/*"
+        "../../packages/api-client/src/*"
       ],
       "@ybis/ui": [
-        "../packages/ui/src"
+        "../../packages/ui/src"
       ],
       "@ybis/ui/*": [
-        "../packages/ui/src/*"
+        "../../packages/ui/src/*"
       ],
       "@ybis/workflows": [
-        "../packages/workflows/src"
+        "../../packages/workflows/src"
       ],
       "@ybis/workflows/*": [
-        "../packages/workflows/src/*"
+        "../../packages/workflows/src/*"
       ]
     },
     "experimentalDecorators": true,
@@ -77,7 +77,11 @@
     "App.tsx",
     "index.js",
     "__tests__/**/*",
-    "types/**/*"
+    "types/**/*",
+    "../../packages/core/src/**/*",
+    "../../packages/api-client/src/**/*",
+    "../../packages/ui/src/**/*",
+    "../../packages/workflows/src/**/*"
   ],
   "exclude": [
     "node_modules",
