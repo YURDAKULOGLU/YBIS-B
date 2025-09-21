@@ -2,8 +2,15 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const path = require('path');
 
 const monorepoRoot = path.resolve(__dirname, '../..');
-const packageRoots = ['core', 'ui', 'api-client', 'workflows'].map(pkg =>
-  path.resolve(monorepoRoot, 'packages', pkg)
+const sharedPackages = [
+  { name: '@ybis/core', dir: 'core' },
+  { name: '@ybis/ui', dir: 'ui' },
+  { name: '@ybis/api-client', dir: 'api-client' },
+  { name: '@ybis/workflows', dir: 'workflows' },
+];
+
+const packageDistRoots = sharedPackages.map(pkg =>
+  path.resolve(monorepoRoot, 'packages', pkg.dir, 'dist')
 );
 
 const makeBlockList = patterns =>
@@ -27,7 +34,7 @@ const extraNodeModules = new Proxy(
 
 const config = {
   projectRoot: __dirname,
-  watchFolders: [monorepoRoot, ...packageRoots],
+  watchFolders: [monorepoRoot, ...packageDistRoots],
   resolver: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -37,10 +44,11 @@ const config = {
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@types': path.resolve(__dirname, 'src/types'),
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@ybis/core': path.resolve(monorepoRoot, 'packages/core/src'),
-      '@ybis/ui': path.resolve(monorepoRoot, 'packages/ui/src'),
-      '@ybis/api-client': path.resolve(monorepoRoot, 'packages/api-client/src'),
-      '@ybis/workflows': path.resolve(monorepoRoot, 'packages/workflows/src'),
+      nanoid: require.resolve('nanoid/non-secure/index.cjs'),
+      ...sharedPackages.reduce((aliases, pkg) => {
+        aliases[pkg.name] = path.resolve(monorepoRoot, 'packages', pkg.dir, 'dist');
+        return aliases;
+      }, {}),
     },
     extraNodeModules,
     nodeModulesPaths: [path.resolve(monorepoRoot, 'node_modules')],

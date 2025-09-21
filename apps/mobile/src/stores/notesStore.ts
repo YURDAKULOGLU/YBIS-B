@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { z } from 'zod';
-import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid/non-secure';
 
 // Zod v4 schemas for notes
 export const NoteSchema = z.object({

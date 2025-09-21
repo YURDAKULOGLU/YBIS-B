@@ -1,3 +1,5 @@
+const { bundleCommand, startCommand } = require('@react-native/community-cli-plugin');
+
 module.exports = {
   project: {
     android: {
@@ -9,4 +11,5 @@ module.exports = {
       sourceDir: './apps/mobile/ios',
     },
   },
+  commands: [bundleCommand, startCommand],
 };

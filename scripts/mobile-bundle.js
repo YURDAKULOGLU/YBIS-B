@@ -4,6 +4,8 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+const cliRunner = path.resolve(__dirname, 'run-react-native-cli.js');
+
 // Renkli çıktı için ANSI kodları
 const colors = {
   reset: '\x1b[0m',
@@ -71,7 +73,7 @@ function checkPrerequisites() {
 
   // React Native CLI kontrolü
   try {
-    execSync('npx react-native --version', { stdio: 'pipe' });
+    execSync(`node ${JSON.stringify(cliRunner)} --version`, { stdio: 'pipe', cwd: path.resolve(__dirname, '..', 'apps', 'mobile') });
     logStep('2', 'React Native CLI: Available');
     logSuccess('React Native CLI is installed');
   } catch (error) {
@@ -115,7 +117,7 @@ function showBuildInfo() {
 function runBundle() {
   logSection('RUNNING BUNDLE');
   
-  const command = `cross-env NODE_OPTIONS=${buildConfig.nodeOptions} react-native bundle --platform ${buildConfig.platform} --dev ${buildConfig.dev} --entry-file ${buildConfig.entryFile} --bundle-output ${buildConfig.bundleOutput} --verbose`;
+  const command = `cross-env NODE_OPTIONS=${buildConfig.nodeOptions} node ${JSON.stringify(cliRunner)} bundle --config ../../react-native.config.js --platform ${buildConfig.platform} --dev ${buildConfig.dev} --entry-file ${buildConfig.entryFile} --bundle-output ${buildConfig.bundleOutput}`;
   
   logStep('Command', command);
   logStep('Status', 'Starting bundle process...');
