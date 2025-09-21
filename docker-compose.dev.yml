@@ -1,0 +1,55 @@
+# Better Docker strategy: Only backend services
+version: '3.9'
+
+services:
+  # Backend in Docker - works great
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command: npm run dev:backend
+    volumes:
+      - ./backend:/workspace/backend
+      - ./packages:/workspace/packages
+      - ./package.json:/workspace/package.json
+    ports:
+      - "3000:3000"
+      - "5432:5432"  # PostgreSQL if needed
+    environment:
+      - NODE_ENV=development
+    networks:
+      - ybis-network
+
+  # Database services
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ybis_dev
+      POSTGRES_USER: ybis
+      POSTGRES_PASSWORD: dev123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ybis-network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - ybis-network
+
+volumes:
+  postgres_data:
+
+networks:
+  ybis-network:
+    driver: bridge
+
+# Mobile development stays on HOST
+# Use: npm run dev:mobile
+# Docker handles: backend + databases
+# Host handles: mobile + Metro + ADB

@@ -1,0 +1,37 @@
+# Dockerfile.backend - Backend servis için
+FROM node:20-bullseye
+
+WORKDIR /workspace
+
+# Package files for dependency resolution
+COPY package*.json ./
+COPY backend/package*.json backend/
+COPY packages/api-client/package*.json packages/api-client/
+COPY packages/core/package*.json packages/core/
+COPY packages/ui/package*.json packages/ui/
+COPY packages/workflows/package*.json packages/workflows/
+
+# Install dependencies (use install for monorepo)
+RUN npm install --include=dev
+
+# Copy source code explicitly to avoid workspace conflicts
+COPY packages/api-client ./packages/api-client
+COPY packages/core ./packages/core
+COPY packages/ui ./packages/ui
+COPY packages/workflows ./packages/workflows
+COPY backend ./backend
+COPY tsconfig*.json ./
+
+# Build packages first
+RUN npm run build:packages
+
+# Build backend
+WORKDIR /workspace/backend
+RUN npm install --include=dev
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Development command
+CMD ["npm", "run", "dev"]

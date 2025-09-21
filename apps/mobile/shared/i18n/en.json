@@ -1,0 +1,50 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "dashboard": "Dashboard",
+    "chat": "Chat",
+    "notes": "Notes",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "YBIS Dashboard",
+    "subtitle": "Welcome to your personal assistant",
+    "today": "Today",
+    "emailSummary": "Email Summary",
+    "tasks": "Tasks",
+    "toChat": "Send to Chat",
+    "empty": "No data yet"
+  },
+  "chat": {
+    "title": "Chat",
+    "subtitle": "AI Assistant Chat Interface"
+  },
+  "notes": {
+    "title": "Notes",
+    "subtitle": "Your Notes Collection",
+    "detail": "Note Detail",
+    "titlePlaceholder": "Title",
+    "contentPlaceholder": "Write...",
+    "empty": "No notes yet"
+  },
+  "common": {
+    "save": "Save",
+    "edit": "Edit",
+    "render": "Render",
+    "open": "Open",
+    "snooze": "Snooze",
+    "cancel": "Cancel",
+    "complete": "Complete",
+    "read": "Read",
+    "summarize": "Summarize",
+    "copy": "Copy to clipboard"
+  },
+  "presets": {
+    "today": "What’s on today?",
+    "emailSummary": "Summarize emails",
+    "planTasks": "Plan today’s tasks",
+    "eventDetail": "Explain this event",
+    "emailDetail": "Summarize this email",
+    "taskDetail": "Detail this task"
+  }
+}

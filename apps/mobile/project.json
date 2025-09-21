@@ -1,0 +1,69 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "mobile",
+  "projectType": "application",
+  "sourceRoot": "apps/mobile/src",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm start",
+        "cwd": "apps/mobile"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build",
+        "cwd": "apps/mobile"
+      },
+      "outputs": ["{projectRoot}/android/app/src/main/assets"],
+      "cache": true
+    },
+    "bundle": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build:bundle",
+        "cwd": "apps/mobile"
+      },
+      "outputs": ["{projectRoot}/android/app/src/main/assets"],
+      "cache": true
+    },
+    "android": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "adb reverse tcp:8081 tcp:8081 && npm run android",
+        "cwd": "apps/mobile"
+      },
+      "dependsOn": ["^build"]
+    },
+    "ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run ios",
+        "cwd": "apps/mobile"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run lint",
+        "cwd": "apps/mobile"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm test",
+        "cwd": "apps/mobile"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run type-check",
+        "cwd": "apps/mobile"
+      }
+    }
+  }
+}

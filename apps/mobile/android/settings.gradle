@@ -1,0 +1,60 @@
+pluginManagement {
+  repositories {
+    google()
+    mavenCentral()
+    gradlePluginPortal()
+  }
+  def workspacePluginDir = file("../node_modules/@react-native/gradle-plugin")
+  def rootPluginDir = file("../../../node_modules/@react-native/gradle-plugin")
+  if (workspacePluginDir.exists()) {
+    includeBuild(workspacePluginDir.absolutePath)
+  } else if (rootPluginDir.exists()) {
+    includeBuild(rootPluginDir.absolutePath)
+  } else {
+    throw new RuntimeException("@react-native/gradle-plugin not found. Did you run npm install?")
+  }
+}
+
+plugins {
+  id('com.facebook.react.settings')
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ext ->
+  ext.autolinkLibrariesFromCommand()
+}
+
+rootProject.name = 'YBISMobile'
+include ':app'
+
+File resolveNodeModule(String moduleName) {
+  def workspaceDir = file("../node_modules/${moduleName}")
+  if (workspaceDir.exists()) {
+    return workspaceDir
+  }
+  def rootDir = file("../../../node_modules/${moduleName}")
+  if (rootDir.exists()) {
+    return rootDir
+  }
+  throw new RuntimeException("Module " + moduleName + " not found in node_modules")
+}
+
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = resolveNodeModule('react-native-gesture-handler').toPath().resolve('android').toFile()
+
+include ':react-native-reanimated'
+project(':react-native-reanimated').projectDir = resolveNodeModule('react-native-reanimated').toPath().resolve('android').toFile()
+
+include ':react-native-safe-area-context'
+project(':react-native-safe-area-context').projectDir = resolveNodeModule('react-native-safe-area-context').toPath().resolve('android').toFile()
+
+include ':react-native-screens'
+project(':react-native-screens').projectDir = resolveNodeModule('react-native-screens').toPath().resolve('android').toFile()
+
+include ':react-native-vector-icons'
+project(':react-native-vector-icons').projectDir = resolveNodeModule('react-native-vector-icons').toPath().resolve('android').toFile()
+
+include ':react-native-async-storage_async-storage'
+project(':react-native-async-storage_async-storage').projectDir = resolveNodeModule('@react-native-async-storage/async-storage').toPath().resolve('android').toFile()
+
+def reactNativeGradlePluginDir = resolveNodeModule('@react-native/gradle-plugin')
+includeBuild(reactNativeGradlePluginDir.absolutePath)

@@ -1,0 +1,32 @@
+{
+    "name": "ybis-mobile",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ../../node_modules/react-native/cli.js start --config ../../react-native.config.js",
+        "android": "node ../../node_modules/react-native/cli.js run-android --config ../../react-native.config.js",
+        "ios": "node ../../node_modules/react-native/cli.js run-ios --config ../../react-native.config.js",
+        "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 node ../../node_modules/react-native/cli.js bundle --config ../../react-native.config.js --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --verbose",
+        "build:bundle": "node ../../scripts/mobile-bundle.js",
+        "build:lite": "node ../../node_modules/react-native/cli.js bundle --config ../../react-native.config.js --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --verbose",
+        "build:android": "cd android && gradlew.bat assembleRelease --info",
+        "build:ios": "cd ios && xcodebuild -workspace YBISMobile.xcworkspace -scheme YBISMobile -configuration Release",
+        "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
+        "test": "npx jest",
+        "type-check": "npx tsc --noEmit",
+        "clean": "node ../../node_modules/react-native/cli.js clean-project-auto --config ../../react-native.config.js"
+    },
+    "peerDependencies": {
+        "react": "19.1.0",
+        "react-native": "0.81.4"
+    },
+    "resolutions": {
+        "react": "19.1.0",
+        "@types/react": "^19.0.0",
+        "@react-native/gradle-plugin": "0.81.4"
+    },
+    "engines": {
+        "node": ">=20.19.4",
+        "npm": ">=10.0.0"
+    }
+}

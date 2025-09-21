@@ -1,0 +1,50 @@
+{
+  "common": {
+    "welcome": "Hoş Geldiniz",
+    "dashboard": "Ana Sayfa",
+    "chat": "Sohbet",
+    "notes": "Notlar",
+    "settings": "Ayarlar"
+  },
+  "dashboard": {
+    "title": "YBIS Dashboard",
+    "subtitle": "Kişisel asistanınıza hoş geldiniz",
+    "today": "Bugün",
+    "emailSummary": "E-posta Özeti",
+    "tasks": "Görevler",
+    "toChat": "Chat'e gönder",
+    "empty": "Henüz veri yok"
+  },
+  "chat": {
+    "title": "Sohbet",
+    "subtitle": "AI Asistan Sohbet Arayüzü"
+  },
+  "notes": {
+    "title": "Notlar",
+    "subtitle": "Not Koleksiyonunuz",
+    "detail": "Not Detayı",
+    "titlePlaceholder": "Başlık",
+    "contentPlaceholder": "Yazın...",
+    "empty": "Henüz not yok"
+  },
+  "common": {
+    "save": "Kaydet",
+    "edit": "Düzenle",
+    "render": "Göster",
+    "open": "Aç",
+    "snooze": "Ertele",
+    "cancel": "İptal",
+    "complete": "Tamamla",
+    "read": "Oku",
+    "summarize": "Özetle",
+    "copy": "Panoya kopyala"
+  },
+  "presets": {
+    "today": "Bugün neler var?",
+    "emailSummary": "E-postaları özetle",
+    "planTasks": "Bugünkü görevleri planla",
+    "eventDetail": "Bu etkinliği açıkla",
+    "emailDetail": "Bu e-postayı özetle",
+    "taskDetail": "Bu görevi detaylandır"
+  }
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run deps:check || exit 1
+npx lint-staged || exit 1
+npm run type-check || exit 1
+npm test -- --passWithNoTests
