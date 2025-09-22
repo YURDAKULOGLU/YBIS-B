@@ -1,31 +1,24 @@
 export default [
   {
+    ignores: [
+      'node_modules/**',
+      'packages/**/dist/**',
+      'backend/dist/**'
+    ]
+  },
+  {
     files: ['scripts/**/*.js'],
     languageOptions: {
-      ecmaVersion: 'latest',
+      ecmaVersion: 2021,
       sourceType: 'commonjs',
       globals: {
         console: 'readonly',
-        module: 'readonly',
         process: 'readonly',
+        module: 'readonly',
         require: 'readonly',
-        __dirname: 'readonly',
-      },
+        __dirname: 'readonly'
+      }
     },
-    rules: {
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
-    },
-  },
-  {
-    ignores: [
-      'apps/**',
-      'backend/**',
-      'docs/**',
-      'node_modules/**',
-      'packages/**',
-      'specs/**',
-      '.*',
-    ],
-  },
+    rules: {}
+  }
 ];

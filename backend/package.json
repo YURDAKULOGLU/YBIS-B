@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@upstash/redis": "^1.35.3",
-    "axios": "^1.12.2",
+    "axios": "1.12.2",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.38.2",
     "helmet": "^8.0.0",
@@ -33,5 +33,9 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "20.18.1",
+    "npm": "10.8.2"
   }
 }
