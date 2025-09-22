@@ -89,10 +89,13 @@ npm test       # Tests
 cd apps/mobile
 npm start      # Metro bundler
 npm run android # Android build
+npm run build:android # Android release build via Gradle wrapper (downloads the wrapper JAR if needed)
 npm run ios    # iOS build
 npm run lint   # Linting
 npm test       # Tests
 ```
+
+> **Not:** Platform politikaları nedeniyle Gradle wrapper'ın `gradle-wrapper.jar` dosyası depoda tutulmuyor. `npm run build:android` komutu eksikse gerekli JAR'ı Gradle dağıtım sunucusundan indirip kaydeder.
 
 ## Katkıda Bulunma
 

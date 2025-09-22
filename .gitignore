@@ -55,13 +55,11 @@ desktop.ini
 
 # Android
 apps/mobile/android/.gradle/
-apps/mobile/android/gradle/
-apps/mobile/android/gradlew
-apps/mobile/android/gradlew.bat
 apps/mobile/android/local.properties
 apps/mobile/android/.cxx/
 apps/mobile/android/app/src/main/assets/index.android.bundle
 apps/mobile/android/app/src/main/assets/index.android.bundle.map
+apps/mobile/android/gradle/wrapper/gradle-wrapper.jar
 
 # iOS
 apps/mobile/ios/Pods/
