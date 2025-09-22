@@ -2,6 +2,8 @@
 
 YBIS, kişisel asistan ve iş zekası sistemi olarak tasarlanmış bir monorepo projesidir.
 
+> Bu satır PR sürecini test etmek amacıyla eklenmiştir.
+
 ## Proje Yapısı
 
 ```
