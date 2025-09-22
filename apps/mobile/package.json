@@ -9,7 +9,7 @@
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 node ../../node_modules/react-native/cli.js bundle --config ../../react-native.config.js --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --verbose",
     "build:bundle": "node ../../scripts/mobile-bundle.js",
     "build:lite": "node ../../node_modules/react-native/cli.js bundle --config ../../react-native.config.js --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --verbose",
-    "build:android": "cd android && gradlew.bat assembleRelease --info",
+    "build:android": "node ../../scripts/run-android-gradle.js assembleRelease --info",
     "build:ios": "cd ios && xcodebuild -workspace YBISMobile.xcworkspace -scheme YBISMobile -configuration Release",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "npx jest",
