@@ -6,8 +6,9 @@ module.exports = {
       '@babel/plugin-transform-runtime',
       {
         helpers: true,
-        regenerator: true,
+        regenerator: false,
         useESModules: false,
+        absoluteRuntime: false,
       },
     ],
     'react-native-reanimated/plugin',

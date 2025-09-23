@@ -16,6 +16,9 @@
         "type-check": "npx tsc --noEmit",
         "clean": "node ../../node_modules/react-native/cli.js clean-project-auto --config ../../react-native.config.js"
     },
+    "dependencies": {
+        "@babel/runtime": "^7.28.4"
+    },
     "peerDependencies": {
         "react": "19.1.0",
         "react-native": "0.81.4"
