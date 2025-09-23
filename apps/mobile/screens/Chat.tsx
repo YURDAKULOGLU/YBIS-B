@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet, Alert, FlatList } from 'react-native';
 import { MessageBubble } from '../src/components/chat/MessageBubble';
 import { MessageComposer } from '../src/components/chat/MessageComposer';
-import { useChatStore, Message } from '../src/stores/chatStore';
+import { useChatStore, ChatMessage } from '../src/stores/chatStore';
 
 export const Chat: React.FC = () => {
   const { messages, isLoading, sendMessage } = useChatStore();
 
-  const renderMessage = useCallback(({ item }: { item: Message }) => (
+  const renderMessage = useCallback(({ item }: { item: ChatMessage }) => (
     <MessageBubble
       message={item}
       isOwn={item.isOwn}
@@ -22,7 +22,7 @@ export const Chat: React.FC = () => {
     />
   ), []);
 
-  const keyExtractor = useCallback((item: Message) => item.id, []);
+  const keyExtractor = useCallback((item: ChatMessage) => item.id, []);
 
   const handleSendMessage = useCallback((content: string) => {
     sendMessage(content);
