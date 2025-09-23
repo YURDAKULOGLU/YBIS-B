@@ -2,17 +2,21 @@ import { create } from 'zustand';
 import { apiClient, apiHelpers } from '../services/api';
 import type { Task, TaskCreate, TaskUpdate } from '@ybis/core';
 
+type TaskPriority = Task['priority'];
+
+interface TaskStats {
+  total: number;
+  completed: number;
+  pending: number;
+  inProgress: number;
+  byPriority: Record<TaskPriority, number>;
+}
+
 interface TasksState {
   tasks: Task[];
   isLoading: boolean;
   error: string | null;
-  stats: {
-    total: number;
-    completed: number;
-    pending: number;
-    inProgress: number;
-    byPriority: Record<string, number>;
-  } | null;
+  stats: TaskStats;
 }
 
 interface TasksActions {
@@ -28,19 +32,50 @@ interface TasksActions {
 
 type TasksStore = TasksState & TasksActions;
 
+const createEmptyStats = (): TaskStats => ({
+  total: 0,
+  completed: 0,
+  pending: 0,
+  inProgress: 0,
+  byPriority: {
+    low: 0,
+    medium: 0,
+    high: 0,
+  },
+});
+
+const computeStats = (tasks: Task[]): TaskStats => {
+  return tasks.reduce<TaskStats>((acc, task) => {
+    acc.total += 1;
+
+    if (task.status === 'completed') {
+      acc.completed += 1;
+    } else if (task.status === 'in_progress') {
+      acc.inProgress += 1;
+    } else if (task.status === 'pending') {
+      acc.pending += 1;
+    }
+
+    const priority = task.priority ?? 'medium';
+    acc.byPriority[priority] += 1;
+
+    return acc;
+  }, createEmptyStats());
+};
+
 export const useTasksStore = create<TasksStore>((set, get) => ({
   // State
   tasks: [],
   isLoading: false,
   error: null,
-  stats: null,
+  stats: createEmptyStats(),
 
   // Actions
   loadTasks: async (filters = {}) => {
     set({ isLoading: true, error: null });
 
     try {
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<{ tasks?: Task[] } | Task[]>(() =>
         apiClient.tasks.listTasks({
           ...filters,
           priority: filters.priority as 'low' | 'medium' | 'high' | undefined
@@ -48,9 +83,13 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
       );
 
       if (result.success && result.data) {
-        set({ 
-          tasks: result.data.tasks || result.data,
-          isLoading: false 
+        const tasks = (result.data as { tasks?: Task[] }).tasks ??
+          (Array.isArray(result.data) ? (result.data as Task[]) : []);
+
+        set({
+          tasks,
+          stats: computeStats(tasks),
+          isLoading: false
         });
       } else {
         throw new Error(result.error || 'Failed to load tasks');
@@ -70,16 +109,20 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
     try {
       const idempotencyKey = apiHelpers.generateIdempotencyKey('task');
       
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<{ task: Task }>(() =>
         apiClient.tasks.createTask(taskData, idempotencyKey)
       );
 
       if (result.success && result.data) {
-        const newTask = result.data.task;
-        set(state => ({
-          tasks: [newTask, ...state.tasks],
-          isLoading: false,
-        }));
+        const newTask = result.data.task as Task;
+        set(state => {
+          const tasks = [newTask, ...state.tasks];
+          return {
+            tasks,
+            stats: computeStats(tasks),
+            isLoading: false,
+          };
+        });
       } else {
         throw new Error(result.error || 'Failed to create task');
       }
@@ -96,18 +139,22 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<{ task: Task }>(() =>
         apiClient.tasks.updateTask({ taskId, ...updates })
       );
 
       if (result.success && result.data) {
-        const updatedTask = result.data.task;
-        set(state => ({
-          tasks: state.tasks.map(task => 
+        const updatedTask = result.data.task as Task;
+        set(state => {
+          const tasks = state.tasks.map(task =>
             task.id === taskId ? updatedTask : task
-          ),
-          isLoading: false,
-        }));
+          );
+          return {
+            tasks,
+            stats: computeStats(tasks),
+            isLoading: false,
+          };
+        });
       } else {
         throw new Error(result.error || 'Failed to update task');
       }
@@ -124,15 +171,19 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<void>(() =>
         apiClient.tasks.deleteTask({ taskId })
       );
 
       if (result.success) {
-        set(state => ({
-          tasks: state.tasks.filter(task => task.id !== taskId),
-          isLoading: false,
-        }));
+        set(state => {
+          const tasks = state.tasks.filter(task => task.id !== taskId);
+          return {
+            tasks,
+            stats: computeStats(tasks),
+            isLoading: false,
+          };
+        });
       } else {
         throw new Error(result.error || 'Failed to delete task');
       }
@@ -149,18 +200,22 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<{ task: Task }>(() =>
         apiClient.tasks.completeTask({ taskId, completed })
       );
 
       if (result.success && result.data) {
-        const updatedTask = result.data.task;
-        set(state => ({
-          tasks: state.tasks.map(task => 
+        const updatedTask = result.data.task as Task;
+        set(state => {
+          const tasks = state.tasks.map(task =>
             task.id === taskId ? updatedTask : task
-          ),
-          isLoading: false,
-        }));
+          );
+          return {
+            tasks,
+            stats: computeStats(tasks),
+            isLoading: false,
+          };
+        });
       } else {
         throw new Error(result.error || 'Failed to update task status');
       }
@@ -175,12 +230,13 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
 
   loadStats: async () => {
     try {
-      const result = await apiHelpers.withErrorHandling(() =>
+      const result = await apiHelpers.withErrorHandling<TaskStats>(() =>
         apiClient.tasks.getTaskStats()
       );
 
       if (result.success && result.data) {
-        set({ stats: result.data });
+        const stats = result.data as Partial<TaskStats>;
+        set({ stats: { ...createEmptyStats(), ...stats } });
       }
     } catch (error) {
       console.error('Failed to load task stats:', error);
@@ -188,5 +244,5 @@ export const useTasksStore = create<TasksStore>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
-  clearTasks: () => set({ tasks: [], stats: null }),
+  clearTasks: () => set({ tasks: [], stats: createEmptyStats() }),
 }));

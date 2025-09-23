@@ -26,7 +26,7 @@
         "predev": "npm run build:packages",
         "dev:packages": "concurrently \"npm run dev --workspace @ybis/api-client\" \"npm run dev --workspace @ybis/core\" \"npm run dev --workspace @ybis/ui\" \"npm run dev --workspace @ybis/workflows\"",
         "prepare": "husky",
-        "type-check": "npm run type-check --workspaces --if-present",
+        "type-check": "tsc -b",
         "start": "npx react-native start --config ./react-native.config.js --projectRoot apps/mobile"
     },
     "devDependencies": {

@@ -2,9 +2,9 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nanoid } from 'nanoid';
-import { ChatMessage } from '@ybis/core';
+import type { Message as CoreMessage } from '@ybis/core';
 
-export interface Message extends ChatMessage {
+export interface ChatMessage extends CoreMessage {
   senderId: string;
   senderName: string;
   isOwn: boolean;
@@ -13,14 +13,17 @@ export interface Message extends ChatMessage {
 }
 
 export interface ChatState {
-  messages: Message[];
+  messages: ChatMessage[];
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   sendMessage: (content: string) => void;
-  addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void;
-  updateMessageStatus: (id: string, status: Message['status']) => void;
+  addMessage: (
+    message: Omit<ChatMessage, 'id' | 'timestamp'> &
+      Partial<Pick<ChatMessage, 'id' | 'timestamp'>>
+  ) => void;
+  updateMessageStatus: (id: string, status: ChatMessage['status']) => void;
   clearMessages: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -35,11 +38,11 @@ export const useChatStore = create<ChatState>()(
 
       sendMessage: (content: string) => {
         const tempId = nanoid();
-        const newMessage: Message = {
+        const newMessage: ChatMessage = {
           id: tempId,
           content,
           role: 'user',
-          timestamp: new Date().toISOString(),
+          timestamp: Date.now(),
           senderId: 'current-user',
           senderName: 'Sen',
           isOwn: true,
@@ -65,10 +68,10 @@ export const useChatStore = create<ChatState>()(
       },
 
       addMessage: (messageData) => {
-        const newMessage: Message = {
+        const newMessage: ChatMessage = {
           ...messageData,
-          id: nanoid(),
-          timestamp: new Date().toISOString(),
+          id: messageData.id ?? nanoid(),
+          timestamp: messageData.timestamp ?? Date.now(),
         };
 
         set((state) => ({
@@ -76,7 +79,7 @@ export const useChatStore = create<ChatState>()(
         }));
       },
 
-      updateMessageStatus: (id: string, status: Message['status']) => {
+      updateMessageStatus: (id: string, status: ChatMessage['status']) => {
         set((state) => ({
           messages: state.messages.map((msg) =>
             msg.id === id ? { ...msg, status } : msg
