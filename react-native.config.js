@@ -9,4 +9,5 @@ module.exports = {
       sourceDir: './apps/mobile/ios',
     },
   },
+  assets: ['./apps/mobile/assets/fonts/'],
 };
