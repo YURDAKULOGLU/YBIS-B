@@ -1,12 +1,9 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": [
-      "es2020",
-      "es2021"
-    ],
-    "module": "esnext",
+    "target": "ESNext",
+    "lib": ["ES2020", "ES2021"],
+    "module": "ESNext",
     "moduleResolution": "node",
     "jsx": "react-native",
     "allowJs": true,
@@ -17,59 +14,32 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "incremental": true,
     "composite": true,
+    "incremental": true,
+    "types": ["jest", "react", "react-native"],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@screens/*": [
-        "./src/screens/*"
-      ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ],
-      "@types/*": [
-        "./src/types/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@ybis/core": [
-        "../packages/core/src"
-      ],
-      "@ybis/core/*": [
-        "../packages/core/src/*"
-      ],
-      "@ybis/api-client": [
-        "../packages/api-client/src"
-      ],
-      "@ybis/api-client/*": [
-        "../packages/api-client/src/*"
-      ],
-      "@ybis/ui": [
-        "../packages/ui/src"
-      ],
-      "@ybis/ui/*": [
-        "../packages/ui/src/*"
-      ],
-      "@ybis/workflows": [
-        "../packages/workflows/src"
-      ],
-      "@ybis/workflows/*": [
-        "../packages/workflows/src/*"
-      ]
-    },
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@types/*": ["./src/types/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@ybis/core": ["../../packages/core/src"],
+      "@ybis/core/*": ["../../packages/core/src/*"],
+      "@ybis/api-client": ["../../packages/api-client/src"],
+      "@ybis/api-client/*": ["../../packages/api-client/src/*"],
+      "@ybis/ui": ["../../packages/ui/src"],
+      "@ybis/ui/*": ["../../packages/ui/src/*"],
+      "@ybis/workflows": ["../../packages/workflows/src"],
+      "@ybis/workflows/*": ["../../packages/workflows/src/*"]
+    }
   },
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/api-client" }
+  ],
   "include": [
     "src/**/*",
     "shared/**/*",

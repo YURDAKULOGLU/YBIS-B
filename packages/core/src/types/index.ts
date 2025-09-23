@@ -23,43 +23,7 @@ export interface NotificationPreferences {
   marketing: boolean;
 }
 
-// Chat related types
-export interface ChatMessage {
-  id: string;
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp: string;
-  metadata?: ChatMessageMetadata;
-}
-
-export interface ChatMessageMetadata {
-  intent?: string;
-  planId?: string;
-  requiresConfirmation?: boolean;
-  cards?: MessageCard[];
-  tools?: ToolUsage[];
-}
-
-export interface MessageCard {
-  kind: 'event' | 'task' | 'note' | 'email' | 'file';
-  payload: any;
-  actions?: CardAction[];
-}
-
-export interface CardAction {
-  id: string;
-  label: string;
-  type: 'primary' | 'secondary' | 'danger';
-  action: string;
-}
-
-export interface ToolUsage {
-  toolName: string;
-  input: any;
-  output?: any;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  executedAt?: string;
-}
+export * from './chat';
 
 // Task related types
 export interface Task {

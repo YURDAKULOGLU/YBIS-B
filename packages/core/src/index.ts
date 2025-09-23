@@ -1,5 +1,5 @@
 // Export types
-export type * from './types';
+export * from './types';
 
 // Export schemas and functions
 export * from './schemas';

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Message } from '../../stores/chatStore';
+import type { ChatMessage } from '../../stores/chatStore';
 
 interface MessageBubbleProps {
-  message: Message;
+  message: ChatMessage;
   isOwn: boolean;
   onPress?: () => void;
   onLongPress?: () => void;

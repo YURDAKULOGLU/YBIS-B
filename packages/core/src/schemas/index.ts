@@ -68,19 +68,21 @@ export const ToolUsageSchema = z.object({
   executedAt: z.string().datetime().optional(),
 });
 
-export const ChatMessageMetadataSchema = z.object({
-  intent: z.string().optional(),
-  planId: z.string().optional(),
-  requiresConfirmation: z.boolean().optional(),
-  cards: z.array(MessageCardSchema).optional(),
-  tools: z.array(ToolUsageSchema).optional(),
-});
+export const ChatMessageMetadataSchema = z
+  .object({
+    intent: z.string().optional(),
+    planId: z.string().optional(),
+    requiresConfirmation: z.boolean().optional(),
+    cards: z.array(MessageCardSchema).optional(),
+    tools: z.array(ToolUsageSchema).optional(),
+  })
+  .catchall(z.unknown());
 
 export const ChatMessageSchema = z.object({
   id: z.string(),
   content: z.string().min(1).max(10000),
-  role: z.enum(['user', 'assistant']),
-  timestamp: z.string().datetime(),
+  role: z.enum(['user', 'assistant', 'system']),
+  timestamp: z.number().nonnegative(),
   metadata: ChatMessageMetadataSchema.optional(),
 });
 

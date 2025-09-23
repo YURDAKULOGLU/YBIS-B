@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { MessageBubble } from '../components/chat/MessageBubble';
 import { MessageComposer } from '../components/chat/MessageComposer';
-import { useChatStore, Message } from '../stores/chatStore';
+import { useChatStore, ChatMessage } from '../stores/chatStore';
 
 const EMPTY_STATE = {
   title: 'Start a conversation',
@@ -12,7 +12,7 @@ const EMPTY_STATE = {
 export const ChatScreen: React.FC = () => {
   const { messages, isLoading, sendMessage } = useChatStore();
 
-  const renderMessage = useCallback(({ item }: { item: Message }) => (
+  const renderMessage = useCallback(({ item }: { item: ChatMessage }) => (
     <MessageBubble
       message={item}
       isOwn={item.isOwn}
@@ -21,7 +21,7 @@ export const ChatScreen: React.FC = () => {
     />
   ), []);
 
-  const keyExtractor = useCallback((item: Message) => item.id, []);
+  const keyExtractor = useCallback((item: ChatMessage) => item.id, []);
 
   const handleSendMessage = useCallback((content: string) => {
     sendMessage(content);
